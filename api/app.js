@@ -12,9 +12,10 @@ app.use(function(req, res, next) {
 });
 
 //Route
-const RouteTodo=require('./routes/todoRoute')
+const RouteTodo = require('./routes/todoRoute')
+const RouteAuth = require('./routes/authRoute')
 app.use(RouteTodo)
-
+app.use(RouteAuth)
 
 
 mongoose.connect("mongodb://localhost/kimtrongtodos",{useNewUrlParser: true,useUnifiedTopology: true});
