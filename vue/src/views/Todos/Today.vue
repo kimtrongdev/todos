@@ -6,7 +6,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import ListScheduled from "./ListScheduled";
+import ListScheduled from "./../../components/ListScheduled";
 
 export default {
   components: {
@@ -38,21 +38,6 @@ export default {
       return todoByIdList;
     },
     ...mapGetters(["lists", "listToday", "allTodo"])
-  },
-  methods: {
-    // addTodo() {
-    //   if (this.newName.length > 1) {
-    //     this.$store.dispatch("ADD_TODO", {
-    //       name: this.newName,
-    //       id_list: this.listSelect
-    //     });
-    //     this.newName = "";
-    //   } else alert("Invalid  data input");
-    // },
-    // clickItem(index) {
-    //   if (this.activeTodo === false) this.activeTodo = index;
-    //   else this.activeTodo = false;
-    // }
   }
 };
 </script>

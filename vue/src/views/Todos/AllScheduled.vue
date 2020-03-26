@@ -6,7 +6,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import ListSchedule from "./ListScheduled";
+import ListSchedule from "../../components/ListScheduled";
 export default {
   components: {
     ListSchedule

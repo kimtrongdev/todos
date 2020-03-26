@@ -1,15 +1,20 @@
 <template>
   <div class="scheduled">
-    <div class="input-group container-md item-todo">
-      <div class="input-group-prepend" @click="addTodo()">
-        <div class="input-group-text">+</div>
-      </div>
-      <input type="text" placeholder="New todo" class="form-control" v-model="newName" v-on:keyup.enter="addTodo()" />
-      <select class="name-list" v-model="listSelect">
-        <option value="-1">Select list</option>
-        <option v-for="(item,index) in lists" :key="index" v-bind:value="item._id">{{item.name}}</option>
-      </select>
-    </div>
+    <el-input placeholder="New todo" v-model="newName" v-on:keyup.enter="addTodo()" class="input-with-select">
+    <el-select slot="prepend" v-model="listSelect" placeholder="Select">
+      <el-option
+        label="Select list"
+        value='-1'/>
+      <el-option
+      v-for="item in lists"
+      :key="item._id"
+      :label="item.name"
+      :value="item._id+''">
+      </el-option>
+    </el-select>
+    <el-button slot="append" icon="el-icon-plus"></el-button>
+  </el-input>
+
 
     <div v-for="(ob, index) in listTodo" :key="index">
       <h4 class="dateName">{{ob.dateName}}</h4>
@@ -17,7 +22,9 @@
         v-for="(item, index) in ob.children"
         :key="index"
         @click="clickActiveTodo(item._id)"
-        v-bind:class="item.status === true?'input-group container-md item-todo disabled':'input-group container-md item-todo'"
+        v-bind:class="item.status === true?
+        'input-group container-md item-todo item-todo-disabled':
+        'input-group container-md item-todo'"
         v-bind:style="'background-color: '+ColorPriority(item.priority)"
       >
         <div class="input-group-prepend" @click="(e)=>e.stopPropagation()">
@@ -50,25 +57,18 @@
       </div>
     </div>
 
-    <div class="item-todo-disabled" v-if="listCompled>0">
-      <div class="input-group-prepend" @click="(e)=>e.stopPropagation()">
-        <div class="input-group-text">
-          <input type="checkbox" v-model="showCompleted"/>
-        </div>
-      </div>
-      <input
-        type="text"
-        disabled
-        class="form-control"
-        v-bind:value='listCompled+" Item completed"'
-      />
+    <div class="handle-todo-disabled" v-if="listCompled>0" @click="showCompleted=!showCompleted">
+      <el-button type="success" round :icon="showCompleted?'el-icon-arrow-down':'el-icon-arrow-up'">
+        {{listCompled+" Item completed"}}
+      </el-button>
     </div>
   </div>
 </template>
 
 <script>
-import DetailTodo from "./../components/DetailTodo";
-import ColorPriority from "./../common/colorPriority";
+import DetailTodo from "./DetailTodo";
+import ColorPriority from "../common/colorPriority";
+
 export default {
   components: {
     DetailTodo
@@ -90,6 +90,9 @@ export default {
       this.lists = this.$props.listsProp;
       if (this.$props.listsProp && this.$props.listsProp[0])
         this.listSelect = this.$props.listsProp[0]._id;
+    },
+    listSelect(){
+      console.log(this.listSelect)
     }
   },
   computed: {
@@ -171,6 +174,7 @@ export default {
   align-items: center;
   padding-top: 30px;
   padding-bottom: 80px;
+  overflow: auto;
 }
 .item-todo {
   margin-top: 10px;
@@ -185,26 +189,26 @@ export default {
 .name-list {
   width: 100px;
 }
-.item-todo-disabled {
-  width: 95%;
+.handle-todo-disabled {
   position: fixed;
   bottom: 5%;
-  left: 2%;
-  display: flex;
+  right: 5%;
 }
-.disabled {
-  /* position: fixed;
+.item-todo-disabled{
   animation: disabledTodo 1s ease-in-out forwards;
-  z-index: 99; */
 }
+
 @keyframes disabledTodo {
   0% {
-    top: 50%;
-    filter: blur(0.2px);
+    opacity: 0;
   }
   100% {
-    top: 100%;
-    filter: blur(0.8px);
+    opacity: 1;
   }
+}
+
+.input-with-select{
+  width: 90%;
+  margin-left:5%
 }
 </style>

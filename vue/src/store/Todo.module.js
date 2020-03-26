@@ -2,6 +2,7 @@ import ApiCaller from './../common/ApiCaller'
 
 const state = {
     todos: [],
+    color: '#000'
 }
 
 const actions = {
@@ -127,6 +128,7 @@ const getters = {
             }
             
             const rs={
+                date: dateItem.getFullYear() +'/'+ dateItem.getMonth()+'/'+dateItem.getDate() ,
                 dateName: nameDate,
                 children:listToday.splice(0,indexLast)
             }

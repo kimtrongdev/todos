@@ -1,7 +1,24 @@
 <template>
   <div class="detail-todo" @click.prevent="click">
-    <textarea @blur="updateDescription()" class="text-des" v-model="description"></textarea>
+    <!-- <textarea @blur="updateDescription()" class="text-des" v-model="description"></textarea> -->
+    <el-input
+      @blur="updateDescription()"
+      class="text-des"
+      type="textarea"
+      :rows="9"
+      placeholder="Description"
+      v-model="description"
+    ></el-input>
     <div class="container-right">
+      <el-row :gutter="20">
+        <el-col :span="16">
+          <el-button slot="append" type="primary">Today</el-button>
+        </el-col>
+        <el-col :span="8">
+          <el-button slot="append" type="primary">Today</el-button>
+        </el-col>
+      </el-row>
+
       <div class="container-time">
         <button type="button" class="btn btn-primary item" @click="setToday()">Today</button>
         <button type="button" class="btn btn-secondary item" @click="setTomorow()">Tomorow</button>
@@ -107,7 +124,7 @@ export default {
   position: relative;
   width: 100%;
   height: 250px;
-  background-color: rgb(250, 239, 221);
+  background-color: #1fbb7a;
   animation: load 0.3s ease-in-out;
 }
 

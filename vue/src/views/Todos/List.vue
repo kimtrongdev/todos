@@ -1,11 +1,14 @@
 <template>
   <div class="list">
+    <router-view/>
     <div class="modal-task" v-if="activeList!==false">
       <div class="btn-hide-model" @click="activeList=false">X</div>
       <ListSchedule v-bind:todos="todos" v-bind:listsProp="itemLists" />
     </div>
 
     <div
+      :body-style="{ padding: '0px' }"
+      shadow="hover"
       class="item-list"
       data-toggle="modal"
       data-target="#exampleModal"
@@ -29,11 +32,12 @@
       </div>
       <!--item-name-->
       <div style="over-flow:auto">
-        <div class="notask text-center" v-if="item.children.length===0">No Task</div>
         <div class="item-todo" v-for="(todo, indexTodo) in item.children" :key="indexTodo">
-          <div v-if="indexTodo<5" class="name-todo" v-bind:style="'color:'+GetColorPriority(todo.priority)">
-            * {{todo.name}}
-          </div>
+          <div
+            v-if="indexTodo<5"
+            class="name-todo"
+            v-bind:style="'color:'+GetColorPriority(todo.priority)"
+          >* {{todo.name}}</div>
         </div>
         <div class="item-todo" v-if="item.children.length>5">
           <div class="name-todo larget-text">. . .</div>
@@ -79,8 +83,9 @@
 
 <script>
 import { mapGetters } from "vuex";
-import ListSchedule from "./ListScheduled";
-import GetColorPriority from "./../common/colorPriority";
+import ListSchedule from "../../components/ListScheduled";
+import GetColorPriority from "../../common/colorPriority";
+
 export default {
   components: {
     ListSchedule
@@ -103,6 +108,7 @@ export default {
     lists: function() {},
     allTodo: function() {},
     activeList: function() {
+       console.log('asd')
       if (this.activeList !== false) {
         let todoByIdList = [];
         const dupTodos = [...this.allTodo];
@@ -154,8 +160,8 @@ export default {
 .item-list {
   width: 200px;
   height: 200px;
-  background-color: rgb(104, 148, 150);
-  color: #fff;
+  background-color: rgb(223, 223, 223);
+  color: #1fbb7a;
   border-radius: 10px;
   float: left;
   margin: 15px;
@@ -164,6 +170,7 @@ export default {
   overflow-x: hidden;
   position: relative;
   cursor: pointer;
+  padding:0px
 }
 
 .item-todo {
@@ -175,8 +182,8 @@ export default {
 .btn-new {
   cursor: pointer;
   text-align: center;
-  background-color: cornsilk;
-  color: #000;
+  background-color: #1fbb7a;
+  color: rgb(255, 255, 255);
   padding: 5px;
   padding-top: 20px;
 }
@@ -214,7 +221,7 @@ export default {
   position: fixed;
   top: 3%;
   left: 6%;
-  background-color: rgb(182, 29, 75);
+  background-color: #1fbb7a;
   color: #fff;
   cursor: pointer;
   font-size: 20px;
@@ -224,9 +231,11 @@ export default {
   background-color: rgb(209, 59, 104);
 }
 .item-name {
-  background-color: rgb(116, 129, 116);
+  background-color: #1fbb7a;
   height: 40px;
   line-height: 40px;
+  color:#fff;
+  font-weight: bold;
 }
 .name-todo {
   width: 100%;
@@ -237,4 +246,5 @@ export default {
   font-size: 20px;
   font-weight: bold;
 }
+
 </style>

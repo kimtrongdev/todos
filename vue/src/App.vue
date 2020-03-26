@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div class="main">
-      <Navbar />
+     
+      <Sidebar/>
       <div class="content">
         <router-view />
       </div>
@@ -10,10 +11,11 @@
 </template>
 
 <script>
-import Navbar from "./components/Navbar";
+//import Navbar from "./components/Navbar";
+import Sidebar from './components/Sidebar'
 export default {
   components: {
-    Navbar
+    Sidebar
   }
 };
 </script>
@@ -24,15 +26,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  display: flex;
 }
 .main{
-    background-color: #a3a4a5;
+    background-color: #f0f0f0;
+    display: flex;
 }
 .content{
-  height: calc(100vh - 50px);
+  height: 100vh;
+  flex:auto;
+  width: 100vw;
   overflow: scroll;
   overflow-x: hidden;
-  padding-bottom:40px
+  padding-bottom:40px;
+  float: left;
 }
 </style>
