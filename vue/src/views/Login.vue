@@ -9,7 +9,7 @@
       <el-form-item  label="Pass" prop="password" class='text'>
         <el-input v-model="auth.password"></el-input>
       </el-form-item>
-      <el-button>Login</el-button>
+      <el-button @click="login()">Login</el-button>
     </el-form>
     </el-card>
   </div>
@@ -26,9 +26,10 @@ export default {
       }
     };
   },
-  method:{
+  methods:{
     login(){
-      
+      console.log('asd')
+      this.$store.dispatch('LOGIN',this.auth)
     }
   }
 };

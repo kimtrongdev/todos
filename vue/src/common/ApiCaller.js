@@ -7,6 +7,12 @@ const ApiCaller = async (enp, method = 'GET', data = null) => {
         body: data ,
         params: data
     })
+    res.then(function (res){
+        console.log(res)
+        
+    }).catch(function (){
+
+    })
     return res
 }
 

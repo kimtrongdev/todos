@@ -9,35 +9,33 @@ const state = {
 
 const actions = {
     ['LOGIN']({ commit }, user) {
-        return new Promise((resolve, reject) => {
-            ApiCaller('/api/login', 'POST', user).then((resp) => {
-                const token = resp.data.token
-                const user = resp.data.user
-                localStorage.setItem('token', token)
-                axios.defaults.headers.common['Authorization'] = token
-                commit('auth_success', token, user)
-                resolve(resp)
-            }).catch(err => {
-                commit('auth_error')
-                localStorage.removeItem('token')
-                reject(err)
-            })
-
+        ApiCaller('/api/login', 'POST', user).then((resp) => {
+            const token = resp.data.token
+            const user = resp.data.user
+            localStorage.setItem('token', token)
+            axios.defaults.headers.common['Authorization'] = token
+            commit('auth_success', token, user)
+           
+        }).catch(() => {
+            localStorage.removeItem('token')
+           
         })
     }
 }
 
 const mutations = {
-    ['SET_USER'](state, user) {
+    ['auth_success'](state, token, user) {
+        state.token = token
         state.user = user
     },
+
     ['SET_AUTH'](state, auth) {
         state.auth = auth
     }
 }
 
 const getters = {
-    isAuth(state){
+    isAuth(state) {
         return state.auth
     }
 }
