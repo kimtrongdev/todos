@@ -58,7 +58,7 @@ exports.login = async function (rq, res) {
                     token:cookie
                 }
                
-                res.json({ user : rpUser }).status(200)
+                res.json({ user : rpUser, token  }).status(200)
             } else {
                 res.json({ 'Message': false }).status(404)
             }

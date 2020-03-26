@@ -5,12 +5,22 @@
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-    <router-view />
+    <div class="main">
+      <Sidebar/>
+      <div class="content">
+        <router-view />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+//import Navbar from "./components/Navbar";
+import Sidebar from '../components/Sidebar'
 export default {
+  components: {
+    Sidebar
+  }
 };
 </script>
 <style>

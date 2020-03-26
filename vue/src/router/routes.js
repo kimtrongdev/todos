@@ -1,9 +1,5 @@
 const routes = [
   {
-    path: '/',
-    redirect: { name: 'Dashboard' }
-  },
-  {
     path: '/dashboard',
     name: 'Dashboard',
     icon: 'el-icon-s-grid',
@@ -45,14 +41,7 @@ const routes = [
     name: 'Setting',
     icon: 'el-icon-s-tools',
     component: () => import('../views/Setting/index.vue')
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    hidden: true,
-    icon: 'el-icon-s-tools',
-    component: () => import('../views/Login.vue')
-  },
+  }
 ]
 // AIzaSyAvdZ047TtqtSMLf2bibNhN84Qzajyf_Uk
 
