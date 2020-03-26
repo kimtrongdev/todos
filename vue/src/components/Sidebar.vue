@@ -7,31 +7,41 @@
       @close="handleClose"
       :collapse="true"
       :style="'background-color:'+$store.state.Color.color_primary"
+      :router="true"
     >
-    
-      <el-submenu v-for="(item ,index) in Routes" :key="index" :index="index+''" class="menu-item">
-        <template slot="title" class="item-link">
-          <router-link :to="{name:item.name}" class="item-link">
-            <i :class="item.icon" style="color:#fff"></i>
-            <span slot="title">{{item.name}}</span>
-          </router-link>
-        </template>
+      <template v-for="(item ,index) in router">
+        <router-link  v-if='item.children && item.children.length>0' :key="index" :to="{name:item.name}" class="item-link">
+        <el-submenu   :index="index+''" class="menu-item">
+          <template slot="title" class="item-link">
+              <i class='icon-sidebar' :class="item.icon"></i>
+          </template>
 
-        <el-menu-item-group style="background-color:#1fbb7a" v-if="item.children">
-          <el-menu-item
-            v-for="(children , indexChild) in item.children"
-            :key="indexChild"
-            :index="index+'-'+indexChild"
-            class="el-menu-item"
-          >
-            <router-link :to="{name:children.name}" class="link">{{children.name}}</router-link>
+          <el-menu-item-group style="background-color:#1fbb7a" v-if="item.children">
+            <template v-for="(children , indexChild) in item.children">
+                <router-link :key="indexChild" :to="{name:children.name}" class="link">
+                  <el-menu-item
+                    :index="index+'-'+indexChild"
+                    class="el-menu-item">
+                      <b class='text-item-menu'>{{children.name}}</b>
+                  </el-menu-item>
+                </router-link>
+              </template>
+          </el-menu-item-group>
+        </el-submenu>
+      </router-link>
+
+        <router-link v-else :key="index" :to="{name:item.name}" class="link">
+          <el-menu-item   class='menu-item'>
+            <i class='icon-sidebar' :class="item.icon" ></i>
+            <span slot="title">{{item.name}}</span>
           </el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
+        </router-link>
+
+      </template>
     </el-menu>
   </div>
 </template>
-<style>
+<style >
 .el-menu-vertical-demo {
   height: 100vh;
 }
@@ -39,10 +49,20 @@
   color: #fff;
   text-decoration: none;
 }
-.el-menu-item:hover .link {
+.text-item-menu{
+  text-decoration:none ;
+  color:#fff ;
+}
+.el-menu-item:hover .text-item-menu {
   color: #1fbb7a;
 }
-
+.icon-sidebar{
+  font-size: 25px;
+  color:#ffffff !important;
+}
+.menu-item:hover .icon-sidebar{
+  color:#1fbb7a !important;
+}
 </style>
 
 <script>
@@ -50,12 +70,21 @@ import Routes from "./../router/routes";
 
 export default {
   data() {
-    return {
-      isCollapse: true,
-      Routes: Routes.filter(item => {
-        return !item.redirect && !item.hidden;
-      })
-    };
+    return {};
+  },
+  computed:{
+    router(){
+      let routeSidebar=Routes
+      routeSidebar.forEach(item => {
+          if(item.children && item.children){
+            const childrenFillter=item.children.filter( function (child){
+              return !child.hidden || child.hidden!==true
+            })
+            item.children=childrenFillter
+          }
+      });
+      return routeSidebar.filter(function (route) { return !route.redirect && !route.hidden })
+    }
   },
   methods: {
     handleOpen(key, keyPath) {

@@ -19,6 +19,7 @@ const routes = [
         path: '/',
         name: 'List',
         icon: 'el-icon-document',
+        hidden: true,
         component: () => import('../views/Todos/List.vue'),
       },
       {
