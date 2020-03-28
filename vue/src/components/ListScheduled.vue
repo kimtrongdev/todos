@@ -1,21 +1,19 @@
 <template>
   <div class="scheduled">
-    <el-input placeholder="New todo" v-model="newName" v-on:keyup.enter="addTodo()" class="input-with-select">
-    <el-select slot="prepend" v-model="listSelect" placeholder="Select">
-      <el-option
-        label="Select list"
-        value='-1'/>
-      <el-option
-      v-for="item in lists"
-      :key="item._id"
-      :label="item.name"
-      :value="item._id+''">
-      </el-option>
-    </el-select>
-    <el-button slot="append" icon="el-icon-plus"></el-button>
-  </el-input>
+    <br />
 
-
+    <el-input
+      placeholder="New todo"
+      v-model="newName"
+      @keyup.enter.native="addTodo()"
+      class="input-with-select"
+    >
+      <el-select slot="prepend" v-model="listSelect" placeholder="Select">
+        <el-option label="Select list" :value="-1" />
+        <el-option v-for="item in lists" :key="item._id" :label="item.name" :value="item._id+''" />
+      </el-select>
+      <el-button slot="append" icon="el-icon-plus" @click="addTodo()"></el-button>
+    </el-input>
     <div v-for="(ob, index) in listTodo" :key="index">
       <h4 class="dateName">{{ob.dateName}}</h4>
       <div
@@ -58,9 +56,11 @@
     </div>
 
     <div class="handle-todo-disabled" v-if="listCompled>0" @click="showCompleted=!showCompleted">
-      <el-button type="success" round :icon="showCompleted?'el-icon-arrow-down':'el-icon-arrow-up'">
-        {{listCompled+" Item completed"}}
-      </el-button>
+      <el-button
+        type="success"
+        round
+        :icon="showCompleted?'el-icon-arrow-down':'el-icon-arrow-up'"
+      >{{listCompled+" Item completed"}}</el-button>
     </div>
   </div>
 </template>
@@ -91,9 +91,7 @@ export default {
       if (this.$props.listsProp && this.$props.listsProp[0])
         this.listSelect = this.$props.listsProp[0]._id;
     },
-    listSelect(){
-      console.log(this.listSelect)
-    }
+    listSelect() {}
   },
   computed: {
     listCompled() {
@@ -133,6 +131,10 @@ export default {
     ColorPriority,
     addTodo() {
       if (this.newName.length > 1) {
+        if (this.listSelect === -1) {
+          this.$message.warning("Select list");
+          return;
+        }
         this.$store.dispatch("ADD_TODO", {
           name: this.newName,
           id_list: this.listSelect
@@ -164,14 +166,25 @@ export default {
         });
       }
     }
+    // changeTitleTodo(e, id_list, id_todo ) {
+    //   console.log('blur')
+    //   const name=e.target.value||''
+    //   if(name.length<1){
+    //     this.$message.error('Name required')
+    //     return
+    //   }
+    //   this.$store.dispatch("UPDATE_TODO", {
+    //       id_todo: id_todo,
+    //       id_list: id_list,
+    //       name
+    //     });
+    // }
   }
 };
 </script>
 
 <style scoped>
 .scheduled {
-  display: grid;
-  align-items: center;
   padding-top: 30px;
   padding-bottom: 80px;
   overflow: auto;
@@ -192,9 +205,10 @@ export default {
 .handle-todo-disabled {
   position: fixed;
   bottom: 5%;
-  right: 5%;
+  left: 50%;
+  transform: translateX(-50%);
 }
-.item-todo-disabled{
+.item-todo-disabled {
   animation: disabledTodo 1s ease-in-out forwards;
 }
 
@@ -207,8 +221,6 @@ export default {
   }
 }
 
-.input-with-select{
-  width: 90%;
-  margin-left:5%
+.input-with-select {
 }
 </style>

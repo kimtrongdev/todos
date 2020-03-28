@@ -7,7 +7,9 @@ const actions = {
 }
 
 const mutations = {
-    
+    ['SET_LOADING_APP'](state, data) {
+        state.isLoaddingApp = data
+    },
 }
 
 const getters= {

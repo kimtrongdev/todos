@@ -1,8 +1,7 @@
 const Todos = require('./../model/Todo')
 
 exports.index = async function (rq, res) {
-    const todos = await Todos.find()
-    res.json(todos)
+    res.json({...await Todos.getAll(rq.user._id)})
 }
 
 exports.createList = async function (rq, res) {
@@ -10,11 +9,11 @@ exports.createList = async function (rq, res) {
 
     let todo = new Todos({
         name: name,
+        user_id: rq.user._id,
         children: []
     })
     await todo.save()
-    const todos = await Todos.find()
-    res.json(todos)
+    res.json({...await Todos.getAll(rq.user._id)})
 }
 
 
@@ -42,8 +41,7 @@ exports.loadData = async function (rq, res) {
         ]
     })
     await todo.save()
-    const todos = await Todos.find()
-    res.json(todos)
+    res.json({...await Todos.getAll(rq.user._id)})
 }
 
 exports.addTodo = async function (rq, res) {
@@ -56,8 +54,7 @@ exports.addTodo = async function (rq, res) {
             })
             doc.children = children
             await doc.save()
-            const todos = await Todos.find()
-            res.json(todos)
+            res.json({...await Todos.getAll(rq.user._id),message:'Add success'})
         } else res.status(400).json({ message: 'ID list invalid' })
     })
 }
@@ -72,8 +69,7 @@ exports.setTimeTodo = async function (rq, res) {
             if (child) {
                 child.time = time
                 await doc.save()
-                const todos = await Todos.find()
-                res.json(todos)
+                res.json({...await Todos.getAll(rq.user._id)})
             } else res.status(400).json({ message: 'ID todo invalid' })
         } else res.status(400).json({ message: 'ID list invalid' })
     })
@@ -90,8 +86,7 @@ exports.update = async function (rq, res) {
         if (doc) {
             doc.name=name
             await doc.save()
-            const todos = await Todos.find()
-            res.json(todos)
+            res.json({...await Todos.getAll(rq.user._id)})
         } else res.status(400).json({ message: 'ID list invalid' })
     })
 }
@@ -112,8 +107,7 @@ exports.deleteTodo = async function (rq, res) {
             if (check===true) {
                 doc.children=children
                 await doc.save()
-                const todos = await Todos.find()
-                res.json(todos)
+                res.json({...await Todos.getAll(rq.user._id)})
             } else res.status(400).json({ message: 'ID todo invalid' })
         } else res.status(400).json({ message: 'ID list invalid' })
     })
@@ -148,11 +142,9 @@ exports.updateTodo = async function (rq, res) {
                     }
                 }
                 await doc.save()
-                const todos = await Todos.find()
-                res.json(todos)
+                res.json({...await Todos.getAll(rq.user._id)})
             } else res.status(400).json({ message: 'ID todo invalid' })
         } else res.status(400).json({ message: 'ID list invalid' })
     })
     //await Todos.find({ _id: idList, 'children._id': idTodo }, { $set: { ['children.$.time']: Date.now() } })
-
 }

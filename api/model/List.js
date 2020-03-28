@@ -2,7 +2,8 @@ const mongoose=require('mongoose')
 const Schema=mongoose.Schema
 
 const SList=new Schema({
-    name:String,
+    name: String,
+    user_id: String
 },{
     timestamps:{
         createdAt:'created_at',

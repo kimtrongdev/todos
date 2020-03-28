@@ -5,9 +5,9 @@ const SUsers=new Schema({
     email:String,
     password:String,
     name:String,
-    auth:1
+    auth:String,
+    token:String
 })
-
 
 
 const users=mongoose.model('users',SUsers)

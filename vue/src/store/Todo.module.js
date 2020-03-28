@@ -9,7 +9,7 @@ const actions = {
     ['LOAD'](context) {
         ApiCaller('/api/todos').then((res) => {
             if (res && res.data) {
-                context.commit('SET_TODOS', res.data)
+                context.commit('SET_TODOS', res.data.todos)
             }
 
         })
@@ -17,35 +17,35 @@ const actions = {
     ['CREATE_LIST'](context, data) {
         ApiCaller('/api/todos', 'POST', data).then((res) => {
             if (res && res.data)
-                context.commit('SET_TODOS', res.data)
+                context.commit('SET_TODOS', res.data.todos)
         })
 
     },
     ['ADD_TODO'](context, data) {
         ApiCaller('/api/todos/add', 'POST', data).then((res) => {
             if (res && res.data){
-                context.commit('SET_TODOS', res.data)
+                context.commit('SET_TODOS', res.data.todos)
             } 
         })
     },
     ['UPDATE_LIST'](context, data) {
         ApiCaller('/api/todos/update', 'POST', data).then((res) => {
             if (res && res.data){
-                context.commit('SET_TODOS', res.data)
+                context.commit('SET_TODOS', res.data.todos)
             } 
         })
     },
     ['DELETE_TODO'](context, data) {
         ApiCaller('/api/todos/deleteTodo', 'POST', data).then((res) => {
             if (res && res.data){
-                context.commit('SET_TODOS', res.data)
+                context.commit('SET_TODOS', res.data.todos)
             } 
         })
     },
     ['UPDATE_TODO'](context, data) {
         ApiCaller('/api/list/todo/update', 'POST', data).then((res) => {
             if (res && res.data){
-                context.commit('SET_TODOS', res.data)
+                context.commit('SET_TODOS', res.data.todos)
             } 
         })
     }

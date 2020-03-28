@@ -2,9 +2,9 @@ export default  function (priority) {
     if (priority === 'NONE')
         return 'none'
     else if (priority === 'LOW')
-        return '#1c1ce0'
+        return '#51f8a5'
     else if (priority === 'MEDIUM')
-        return '#f3a939'
+        return '#f8bd64'
     else if (priority === 'HIGH')
-        return '#bd173b'
+        return '#da4465'
 }

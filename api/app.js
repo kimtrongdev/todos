@@ -3,6 +3,7 @@ var createError = require('http-errors');
 const mongoose = require('mongoose');
 var express = require('express');
 var app = express();
+require('dotenv').config()
 
 //cors
 app.use(function(req, res, next) {

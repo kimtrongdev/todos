@@ -1,37 +1,41 @@
 <template>
   <div class="detail-todo" @click.prevent="click">
     <!-- <textarea @blur="updateDescription()" class="text-des" v-model="description"></textarea> -->
-    <el-input
-      @blur="updateDescription()"
-      class="text-des"
-      type="textarea"
-      :rows="9"
-      placeholder="Description"
-      v-model="description"
-    ></el-input>
-    <div class="container-right">
-      <el-row :gutter="20">
-        <el-col :span="16">
-          <el-button slot="append" type="primary">Today</el-button>
-        </el-col>
-        <el-col :span="8">
-          <el-button slot="append" type="primary">Today</el-button>
-        </el-col>
-      </el-row>
+    <div class="container">
+      <el-input
+        @blur="updateTodo()"
+        class="text-input"
+        type="text"
+        placeholder="name"
+        v-model="name"
+      ></el-input>
 
-      <div class="container-time">
-        <button type="button" class="btn btn-primary item" @click="setToday()">Today</button>
-        <button type="button" class="btn btn-secondary item" @click="setTomorow()">Tomorow</button>
-        <Datetime v-model="time" class="item" />
-      </div>
+      <el-input
+        @blur="updateTodo()"
+        class="text-des"
+        type="textarea"
+        :rows="8"
+        placeholder="Description"
+        v-model="description"
+      ></el-input>
+    </div>
+
+    <div class="container">
+      <el-date-picker
+        v-model="time"
+        type="date"
+        placeholder="Pick a day"
+        :picker-options="pickerOptions"
+      ></el-date-picker>
+
       <div class="form-group">
         <label for="Priority">Priority:</label>
-        <select class="form-control" v-model="priority" id="Priority">
-          <option value="NONE">None</option>
-          <option value="LOW">LOW</option>
-          <option value="MEDIUM">MEDIUM</option>
-          <option value="HIGH">HIGH</option>
-        </select>
+        <el-select v-model="priority" placeholder="Select">
+          <el-option  :style="'background-color:'+ColorPriority('NONE')" value="NONE">None</el-option>
+          <el-option :style="'background-color:'+ColorPriority('LOW')" value="LOW">LOW</el-option>
+          <el-option :style="'background-color:'+ColorPriority('MEDIUM')" value="MEDIUM">MEDIUM</el-option>
+          <el-option :style="'background-color:'+ColorPriority('HIGH')" value="HIGH">HIGH</el-option>
+        </el-select>
       </div>
       <button type="button" class="btn btn-danger btn-sm btn-delete" @click="deleteTodo()">Delete</button>
     </div>
@@ -39,24 +43,43 @@
 </template>
 
 <script>
-import { Datetime } from "vue-datetime";
-import "vue-datetime/dist/vue-datetime.css";
-
+import ColorPriority from './../common/colorPriority'
 export default {
   data() {
     return {
       time: "",
       description: "",
-      priority: ""
+      priority: "",
+      name: "",
+
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        },
+        shortcuts: [
+          {
+            text: "Today",
+            onClick(picker) {
+              picker.$emit("pick", new Date());
+            }
+          },
+          {
+            text: "Tomorow",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24);
+              picker.$emit("pick", date);
+            }
+          }
+        ]
+      }
     };
-  },
-  components: {
-    Datetime
   },
   mounted: function() {
     this.time = this.$props.todo.time;
     this.description = this.$props.todo.description;
     this.priority = this.$props.todo.priority;
+    this.name = this.$props.todo.name;
   },
   props: {
     todo: Object,
@@ -85,22 +108,9 @@ export default {
   },
   computed: {},
   methods: {
+    ColorPriority,
     click: function(e) {
       e.stopPropagation();
-    },
-    setToday: function() {
-      this.$store.dispatch("UPDATE_TODO", {
-        id_list: this.id_list,
-        id_todo: this.id_todo,
-        time: new Date()
-      });
-    },
-    setTomorow: function() {
-      this.$store.dispatch("UPDATE_TODO", {
-        id_list: this.id_list,
-        id_todo: this.id_todo,
-        time: new Date().setDate(new Date().getDate() + 1)
-      });
     },
     deleteTodo: function() {
       this.$store.dispatch("DELETE_TODO", {
@@ -108,11 +118,12 @@ export default {
         id_todo: this.id_todo
       });
     },
-    updateDescription: function() {
+    updateTodo: function() {
       this.$store.dispatch("UPDATE_TODO", {
         id_list: this.id_list,
         id_todo: this.id_todo,
-        description: this.description
+        description: this.description,
+        name: this.name
       });
     }
   }
@@ -123,9 +134,10 @@ export default {
 .detail-todo {
   position: relative;
   width: 100%;
-  height: 250px;
+  height: 300px;
   background-color: #1fbb7a;
   animation: load 0.3s ease-in-out;
+  display: flex;
 }
 
 @keyframes load {
@@ -136,15 +148,10 @@ export default {
     height: 300px;
   }
 }
-.text-des {
-  width: 46%;
-  margin: 2%;
-  height: 80%;
-  float: left;
-  padding: 5px;
+.text-input {
+  width: 100%;
 }
-.container-right {
-  float: left;
+.container {
   width: 46%;
   height: 80%;
   background-color: rgb(218, 218, 218);
@@ -164,5 +171,6 @@ export default {
 .container-setting-time .item {
   flex: auto;
   float: left;
+
 }
 </style>

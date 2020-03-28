@@ -3,11 +3,14 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     icon: 'el-icon-s-grid',
+    meta: {
+      requiresAuth: true
+    },
     component: () => import('../views/Dashboard/index.dashboard.vue')
   },
   {
     path: '/todos/list',
-    name: 'List',
+    name: '',
     icon: 'el-icon-document',
     component: () => import('../views/Todos/index.todos.vue'),
     children: [

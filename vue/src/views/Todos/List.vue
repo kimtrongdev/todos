@@ -1,9 +1,11 @@
 <template>
   <div class="list">
-    <router-view/>
+    <router-view />
     <div class="modal-task" v-if="activeList!==false">
-      <div class="btn-hide-model" @click="activeList=false">X</div>
-      <ListSchedule v-bind:todos="todos" v-bind:listsProp="itemLists" />
+      <div class="btn-hide-model" @click="activeList=false">
+         <el-button  circle icon="el-icon-close" type="danger"></el-button>
+      </div>
+      <ListSchedule v-bind:todos="todosProps" v-bind:listsProp="itemLists" />
     </div>
 
     <div
@@ -14,7 +16,7 @@
       data-target="#exampleModal"
       v-for="(item, index) in lists"
       :key="index"
-      @click="activeList=item._id+'';itemLists=[{_id:item.id,name:item.name}]"
+      @click="activeList=item._id+'';itemLists=[{_id:item._id,name:item.name}]"
     >
       <div class="item-name" @click="(e)=>{e.stopPropagation()}">
         <div class="input-group mb-3" v-if="(activeEdit!==false && activeEdit===item._id)">
@@ -37,7 +39,7 @@
             v-if="indexTodo<5"
             class="name-todo"
             v-bind:style="'color:'+GetColorPriority(todo.priority)"
-          >* {{todo.name}}</div>
+          >* {{ ShortString(todo.name, 5) }}</div>
         </div>
         <div class="item-todo" v-if="item.children.length>5">
           <div class="name-todo larget-text">. . .</div>
@@ -85,7 +87,7 @@
 import { mapGetters } from "vuex";
 import ListSchedule from "../../components/ListScheduled";
 import GetColorPriority from "../../common/colorPriority";
-
+import {ShortString} from './../../common/helpers'
 export default {
   components: {
     ListSchedule
@@ -106,11 +108,12 @@ export default {
   },
   watch: {
     lists: function() {},
-    allTodo: function() {},
-    activeList: function() {
-       console.log('asd')
+    allTodo: function() {}
+  },
+  computed: {
+    todosProps() {
+      let todoByIdList = [];
       if (this.activeList !== false) {
-        let todoByIdList = [];
         const dupTodos = [...this.allTodo];
 
         dupTodos.forEach(item => {
@@ -124,17 +127,13 @@ export default {
             todoByIdList.push(obNew);
           }
         });
-        this.todos = todoByIdList;
       }
+      return todoByIdList;
     },
-    todos: function() {
-      //console.log(this.todos);
-    }
-  },
-  computed: {
     ...mapGetters(["lists", "allTodo"])
   },
   methods: {
+    ShortString,
     GetColorPriority,
     onCreateList() {
       this.$store.dispatch("CREATE_LIST", { name: this.newName });
@@ -170,7 +169,7 @@ export default {
   overflow-x: hidden;
   position: relative;
   cursor: pointer;
-  padding:0px
+  padding: 0px;
 }
 
 .item-todo {
@@ -215,26 +214,15 @@ export default {
   }
 }
 .btn-hide-model {
-  width: 30px;
-  height: 30px;
-  border-radius: 20px;
   position: fixed;
   top: 3%;
   left: 6%;
-  background-color: #1fbb7a;
-  color: #fff;
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: bold;
-}
-.btn-hide-model:hover {
-  background-color: rgb(209, 59, 104);
 }
 .item-name {
   background-color: #1fbb7a;
   height: 40px;
   line-height: 40px;
-  color:#fff;
+  color: #fff;
   font-weight: bold;
 }
 .name-todo {
@@ -246,5 +234,4 @@ export default {
   font-size: 20px;
   font-weight: bold;
 }
-
 </style>

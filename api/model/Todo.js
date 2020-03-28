@@ -29,10 +29,14 @@ const items=new Schema({
 
 const STodos=new Schema({
     name:String,
+    user_id:String,
     children:[items]
 })
 
-
+STodos.statics.getAll=async function (_id){
+    const list=await todos.find({user_id:_id})
+    return {todos:list}
+}
 
 const todos=mongoose.model('todos',STodos)
 module.exports=todos
